@@ -1,6 +1,5 @@
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
-from django.utils.decorators import method_decorator
 from wagtailcache.cache import cache_page
 
 from .models import BlogIndexPage, BlogPage, BlogCategory
@@ -24,7 +23,6 @@ def author_view(request, author):
     return index.serve(request, author=author)
 
 
-@method_decorator(cache_page, name='dispatch')
 class LatestEntriesFeed(Feed):
     '''
     If a URL ends with "rss" try to find a matching BlogIndexPage
@@ -62,12 +60,11 @@ class LatestEntriesFeed(Feed):
         return blog.first_published_at
 
     
-@method_decorator(cache_page, name='dispatch')
 class LatestEntriesFeedAtom(LatestEntriesFeed):
     feed_type = Atom1Feed
 
     
-@method_decorator(cache_page, name='dispatch')
+
 class LatestCategoryFeed(Feed):
     description = "A Blog"
 
