@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from wagtailcache.cache import WagtailCacheMixin
 from django.utils.translation import gettext_lazy as _
 from wagtail.admin.edit_handlers import (
     FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel)
@@ -18,7 +19,7 @@ from .utils import unique_slugify
 import datetime
 
 
-class BlogIndexPageAbstract(Page):
+class BlogIndexPageAbstract(WagtailCacheMixin, Page):
     class Meta:
         verbose_name = _('Blog index')
         abstract = True
@@ -108,7 +109,7 @@ def limit_author_choices():
     return limit
 
 
-class BlogPageAbstract(Page):
+class BlogPageAbstract(WagtailCacheMixin, Page):
     body = RichTextField(verbose_name=_('body'), blank=True)
     tags = ClusterTaggableManager(through='BlogPageTag', blank=True)
     date = models.DateField(
