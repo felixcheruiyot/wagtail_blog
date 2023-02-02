@@ -8,7 +8,6 @@ from wagtail.api import APIField
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from wagtail.images import get_image_model_string
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
@@ -171,6 +170,6 @@ class BlogPageAbstract(Page):
             FieldPanel('tags'),
             FieldPanel('blog_categories'),
         ], heading="Tags and Categories"),
-        ImageChooserPanel('header_image'),
+        FieldPanel('header_image'),
         FieldPanel('body', classname="full"),
     ]
