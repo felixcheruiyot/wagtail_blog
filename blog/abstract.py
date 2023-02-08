@@ -5,6 +5,8 @@ from wagtailcache.cache import WagtailCacheMixin
 from django.utils.translation import gettext_lazy as _
 from wagtail.admin.edit_handlers import (
     FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel)
+from wagtail.admin.edit_handlers import TabbedInterface, ObjectList
+from wagtailyoast.edit_handlers import YoastPanel
 from wagtail.api import APIField
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
@@ -117,6 +119,7 @@ class BlogPageAbstract(WagtailCacheMixin, Page):
         help_text=_("This date may be displayed on the blog post. It is not "
                     "used to schedule posts to go live at a later date.")
     )
+    keywords = models.CharField(default='', blank=True, max_length=100)
     header_image = models.ForeignKey(
         get_image_model_string(),
         null=True,
@@ -150,6 +153,18 @@ class BlogPageAbstract(WagtailCacheMixin, Page):
         FieldPanel('date'),
         FieldPanel('author'),
     ]
+    
+    edit_handler = TabbedInterface([
+        ObjectList(Page.content_panels, heading=('Content')),
+        ObjectList(Page.promote_panels, heading=('Promotion')),
+        ObjectList(Page.settings_panels, heading=('Settings')),
+        YoastPanel(
+            keywords='keywords',
+            title='seo_title',
+            search_description='search_description',
+            slug='slug'
+        ),
+    ])
 
     def save_revision(self, *args, **kwargs):
         if not self.author:
